@@ -13,4 +13,6 @@ public class HomeController {
   public String logout(){
 	  return "login";
   }
+
+  // unnecessary comment
 }
