@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping(value="/")
 public class HomeController {
-	/*@PostMapping("/index")
-  public String index(){
-	  return "index";
-  }*/
+
   @GetMapping("/logout")
   public String logout(){
 	  return "login";
