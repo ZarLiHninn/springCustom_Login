@@ -1,47 +1,31 @@
-package com.example.demo;
+package com.example.demo.config;
 
-
-
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
-import javax.activation.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.constants.RequestUrl;
+import com.example.demo.constants.ViewName;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@EnableWebMvc
-@Configuration
 @EnableWebSecurity
 public class spConfigure extends WebSecurityConfigurerAdapter implements WebMvcConfigurer{
 
-	
-    
-	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/").permitAll()
-		.antMatchers("/").hasAnyRole("USER")
+		.antMatchers(RequestUrl.SLASH).permitAll()
+		.antMatchers(RequestUrl.SLASH).hasAnyRole("USER")
 		
 		.and()
 		.formLogin()
-		.loginPage("/login");
+		.loginPage(RequestUrl.LOGIN);
 		
 	}
-
-
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -52,16 +36,12 @@ public class spConfigure extends WebSecurityConfigurerAdapter implements WebMvcC
         
 	}
 
-	
-	
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		// TODO Auto-generated method stub
-		registry.addViewController("/login").setViewName("login");
-		registry.addViewController("/").setViewName("index");
+		registry.addViewController(RequestUrl.LOGIN).setViewName(ViewName.LOGIN);
+		registry.addViewController(RequestUrl.SLASH).setViewName(ViewName.INDEX);
 	}
-
-
 
 	@Bean
     public PasswordEncoder passwordEncoder() {
