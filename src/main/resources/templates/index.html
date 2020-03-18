@@ -2,10 +2,12 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Welcome</title>
 </head>
 <body>
    <h1>Hello World</h1>
-  <a th:href="@{/logout}">Logout</a>
+  <form action="#" th:action="@{/logout}" method="post">
+     <input type="submit" value="Logout"/>
+   </form>
 </body>
 </html>
