@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;import com.e
 
 @EnableWebSecurity
 public class SecurityConfigure extends WebSecurityConfigurerAdapter{
-
+    //login and logout
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
