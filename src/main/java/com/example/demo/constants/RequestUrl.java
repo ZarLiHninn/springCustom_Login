@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.constants;
 
 public class RequestUrl {
    public static final String LOGIN = "/login";

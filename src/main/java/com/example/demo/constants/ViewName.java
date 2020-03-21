@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.constants;
 
 public class ViewName {
 	public static final String LOGIN = "login";
