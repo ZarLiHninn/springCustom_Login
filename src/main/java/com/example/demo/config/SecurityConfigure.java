@@ -1,8 +1,6 @@
 package com.example.demo.config;
 
 
-
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,14 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
-
-import com.example.demo.constants.RequestUrl;
-
-
-
-
+import org.springframework.security.crypto.password.PasswordEncoder;import com.example.demo.constants.RequestUrl;
 
 
 @EnableWebSecurity
@@ -39,40 +30,34 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 		.logout()
 		.logoutSuccessUrl(RequestUrl.LOGIN)
 		.and()
-        .sessionManagement()
-            .maximumSessions(1)
-            .expiredUrl(RequestUrl.LOGIN)
-                .maxSessionsPreventsLogin(true)
-                .sessionRegistry(sessionRegistry());
+		.exceptionHandling().accessDeniedPage("/error")
+		.and()
+		.sessionManagement()
+		.maximumSessions(1)
+		.expiredUrl(RequestUrl.LOGIN)
+		.maxSessionsPreventsLogin(true)
+		.sessionRegistry(sessionRegistry());
 		
 	}
 
-	
 
 	@Bean
 	public SessionRegistry sessionRegistry() {
-	    SessionRegistry sessionRegistry = new SessionRegistryImpl();
-	    return sessionRegistry;
+		SessionRegistry sessionRegistry = new SessionRegistryImpl();
+		return sessionRegistry;
 	}
-
-	@Bean
-    public static ServletListenerRegistrationBean httpSessionEventPublisher() {
-        return new ServletListenerRegistrationBean(new HttpSessionEventPublisher());
-    }
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication()
-        .withUser("user").password(passwordEncoder().encode("pass")).roles("USER")
-        .and()
-        .withUser("admin").password(passwordEncoder().encode("adpass")).roles("ADMIN");
-        
+		.withUser("user").password(passwordEncoder().encode("pass")).roles("USER")
+		.and()
+		.withUser("admin").password(passwordEncoder().encode("adpass")).roles("ADMIN");
+    }
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
-	
-	@Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-   
 }
