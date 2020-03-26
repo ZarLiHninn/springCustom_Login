@@ -19,7 +19,6 @@ import com.example.demo.constants.ViewName;
 
 public class MyErrorController implements ErrorController{
 
-
 	@RequestMapping(RequestUrl.ERROR)
 	public String handleError(HttpServletRequest request,Model model) {
 	    Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
@@ -38,11 +37,11 @@ public class MyErrorController implements ErrorController{
 	    return getErrorPath();
 	}
 
-@Override
-public String getErrorPath() {
-	
-	return RequestUrl.ERROR;
-}
+	@Override
+	public String getErrorPath() {
+
+		return RequestUrl.ERROR;
+	}
 	
 
 }

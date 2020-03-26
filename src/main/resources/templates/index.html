@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="ISO-8859-1">
 <title>Welcome</title>
@@ -16,6 +16,7 @@
 <body>
 	<div class="container">
 		<h1>Hello World</h1>
+		<span th:text="${username}"></span>
 		<form action="#" th:action="@{/logout}" method="post">
 			<input type="submit" value="Logout" />
 		</form>
