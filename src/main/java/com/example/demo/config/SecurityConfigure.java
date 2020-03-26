@@ -13,14 +13,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;import com.example.demo.constants.RequestUrl;
 
-
 @EnableWebSecurity
 public class SecurityConfigure extends WebSecurityConfigurerAdapter{
-    //login and logout
-	
+
 	@Autowired
 	UserDetailsService userDetailsService;
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
@@ -42,10 +40,7 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 		.expiredUrl(RequestUrl.LOGIN)
 		.maxSessionsPreventsLogin(true)
 		.sessionRegistry(sessionRegistry());
-		
 	}
-
-
 	@Bean
 	public SessionRegistry sessionRegistry() {
 		SessionRegistry sessionRegistry = new SessionRegistryImpl();
@@ -55,12 +50,11 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService);
-    }
+	}
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder(){
 		return NoOpPasswordEncoder.getInstance();
-		
 	}
 
 }

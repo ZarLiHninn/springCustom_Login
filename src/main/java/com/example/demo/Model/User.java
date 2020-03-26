@@ -14,19 +14,17 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	@Column(name="username")
-    private String username;
+	private String username;
 	@Column(name="password")
-    private String password;
+	private String password;
 	@Column(name="roles")
-    private String roles;
+	private String roles;
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	
 	public String getUsername() {
 		return username;
 	}
@@ -45,6 +43,6 @@ public class User {
 	public void setRoles(String roles) {
 		this.roles = roles;
 	}
-    
-    
+
+
 }

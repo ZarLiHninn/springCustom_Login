@@ -5,5 +5,4 @@ public class RequestUrl {
 	public static final String SLASH = "/";
 	public static final String INDEX = "/index";
 	public static final String ERROR = "/error";
-
 }
