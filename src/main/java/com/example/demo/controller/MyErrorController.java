@@ -1,8 +1,5 @@
 package com.example.demo.controller;
 
-
-
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,8 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.demo.constants.RequestUrl;
-import com.example.demo.constants.ViewName;
+import com.example.demo.constant.RequestUrl;
+import com.example.demo.constant.ViewName;
 
 @Controller
 
@@ -27,11 +24,11 @@ public class MyErrorController implements ErrorController{
 	        Integer statusCode = Integer.valueOf(status.toString());
 	     
 	        if(statusCode == HttpStatus.NOT_FOUND.value()) {
-	            return ViewName.NOTFOUND;
+	            return ViewName.NOT_FOUND;
 	        }
 	        else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
 	            
-	            return ViewName.INTERNALSERVER;
+	            return ViewName.INTERNAL_SERVER_ERROR;
 	        }
 	    }
 	    return getErrorPath();

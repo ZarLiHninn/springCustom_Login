@@ -1,4 +1,4 @@
-package com.example.demo.Model;
+package com.example.demo.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="user")
-public class User {
+public class MyUser {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

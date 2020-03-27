@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.constants.RequestUrl;
+import com.example.demo.constant.RequestUrl;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;

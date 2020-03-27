@@ -1,4 +1,4 @@
-package com.example.demo.Services;
+package com.example.demo.service;
 
 
 
@@ -10,7 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.demo.Model.User;
+import com.example.demo.model.MyUser;
 
 public class MyUserDetails implements UserDetails {
 
@@ -20,7 +20,7 @@ public class MyUserDetails implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-	public MyUserDetails(User user) {
+	public MyUserDetails(MyUser user) {
 		this.username=user.getUsername();
 		this.password=user.getPassword();
 		this.authorities=Arrays.stream(user.getRoles().split(","))
