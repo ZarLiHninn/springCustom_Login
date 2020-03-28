@@ -11,7 +11,9 @@
 			<h2 class="title">Hello World</h2>
 			<img th:src="@{/img/avatar.svg}">
 			<span th:text="'You logged in as ' + ${username}"></span>
-			<a class="btn" th:href="@{/logout}">Logout</a>
+			<form action="#" th:action="@{/logout}" method="post">
+				<input type="submit" value="Logout" />
+			</form>
 		</div>
 
 	</div>

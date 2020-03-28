@@ -25,6 +25,7 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+
 		http.authorizeRequests()
 				.antMatchers(
 						RequestUrl.LOGIN + "/**"
@@ -33,37 +34,70 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 						, "/js/**"
 						, "/img/**"
 				).permitAll()
-				.antMatchers(RequestUrl.INDEX).hasAnyRole("ADMIN", "USER")
-				.antMatchers(RequestUrl.SLASH).hasAnyRole("ADMIN", "USER")
-				.anyRequest()
-				.authenticated();
-
-		http.formLogin()
+				.antMatchers(RequestUrl.SLASH).hasAnyRole("USER","ADMIN")
+				.anyRequest().authenticated()
+				.and()
+				.formLogin()
 				.loginPage(RequestUrl.LOGIN)
-				.defaultSuccessUrl(RequestUrl.INDEX, true)
-				.usernameParameter("username")
-				.passwordParameter("password")
-				.failureHandler(customAuthenticationFailureHandler());
-
-		http.logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher(RequestUrl.LOGOUT))
+				.permitAll()
+				.defaultSuccessUrl(RequestUrl.INDEX)
+				.and()
+				.logout()
 				.logoutSuccessUrl(RequestUrl.LOGIN)
-				.deleteCookies("JSESSIONID")
-				.invalidateHttpSession(true)
-				.permitAll();
-
-		http.sessionManagement()
+				.and()
+				.exceptionHandling().accessDeniedPage("/error")
+				.and()
+				.sessionManagement()
 				.maximumSessions(1)
+				.expiredUrl(RequestUrl.LOGIN)
 				.maxSessionsPreventsLogin(true)
-				.expiredUrl(RequestUrl.LOGOUT);
-
-		http.headers().disable();
+				.sessionRegistry(sessionRegistry());
+//
+//		http.authorizeRequests()
+//				.antMatchers(
+//						RequestUrl.LOGIN + "/**"
+//						, RequestUrl.ERROR + "/**"
+//						, "/css/**"
+//						, "/js/**"
+//						, "/img/**"
+//				).permitAll()
+//				.antMatchers(RequestUrl.INDEX).hasAnyRole("ADMIN", "USER")
+//				.antMatchers(RequestUrl.SLASH).hasAnyRole("ADMIN", "USER")
+//				.anyRequest()
+//				.authenticated();
+//
+//		http.formLogin()
+//				.loginPage(RequestUrl.LOGIN)
+//				.defaultSuccessUrl(RequestUrl.INDEX, true)
+//				.usernameParameter("username")
+//				.passwordParameter("password")
+//				.failureHandler(customAuthenticationFailureHandler());
+//
+//		http.logout()
+//				.logoutRequestMatcher(new AntPathRequestMatcher(RequestUrl.LOGOUT))
+//				.logoutSuccessUrl(RequestUrl.LOGIN)
+//				.deleteCookies("JSESSIONID")
+//				.invalidateHttpSession(true)
+//				.permitAll();
+//
+//		http.sessionManagement()
+//				.maximumSessions(1)
+//				.maxSessionsPreventsLogin(true)
+//				.expiredUrl(RequestUrl.LOGOUT);
+//
+//		http.headers().disable();
 	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
     }
+
+	@Bean
+	public SessionRegistry sessionRegistry() {
+		SessionRegistry sessionRegistry = new SessionRegistryImpl();
+		return sessionRegistry;
+	}
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder(){
