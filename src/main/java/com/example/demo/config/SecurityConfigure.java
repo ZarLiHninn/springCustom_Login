@@ -2,8 +2,10 @@ package com.example.demo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
@@ -14,18 +16,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;import com.e
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+@Configuration
 @EnableWebSecurity
 public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	UserDetailsService userDetailsService;
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers(
 						RequestUrl.LOGIN + "/**"
 						, RequestUrl.ERROR + "/**"
+						, "/css/**"
+						, "/js/**"
+						, "/img/**"
 				).permitAll()
 				.antMatchers(RequestUrl.INDEX).hasAnyRole("ADMIN", "USER")
 				.antMatchers(RequestUrl.SLASH).hasAnyRole("ADMIN", "USER")
@@ -49,7 +55,6 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 				.logoutRequestMatcher(new AntPathRequestMatcher(RequestUrl.LOGOUT))
 				.logoutSuccessUrl(RequestUrl.LOGIN)
 				.permitAll();
-
 	}
 
 	@Bean
