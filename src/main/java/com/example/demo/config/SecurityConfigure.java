@@ -27,32 +27,36 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.authorizeRequests()
-				.antMatchers(
-						RequestUrl.LOGIN + "/**"
-						, RequestUrl.ERROR + "/**"
-						, "/css/**"
-						, "/js/**"
-						, "/img/**"
-				).permitAll()
-				.antMatchers(RequestUrl.SLASH).hasAnyRole("USER","ADMIN")
-				.anyRequest().authenticated()
-				.and()
-				.formLogin()
-				.loginPage(RequestUrl.LOGIN)
-				.permitAll()
-				.defaultSuccessUrl(RequestUrl.INDEX)
-				.and()
-				.logout()
-				.logoutSuccessUrl(RequestUrl.LOGIN)
-				.and()
-				.exceptionHandling().accessDeniedPage("/error")
-				.and()
-				.sessionManagement()
-				.maximumSessions(1)
-				.expiredUrl(RequestUrl.LOGIN)
-				.maxSessionsPreventsLogin(true)
-				.sessionRegistry(sessionRegistry());
-//
+			.antMatchers(
+				RequestUrl.LOGIN + "/**"
+				, RequestUrl.LOGOUT + "/**"
+				, RequestUrl.ERROR + "/**"
+				, "/css/**"
+				, "/js/**"
+				, "/img/**"
+			).permitAll()
+			.antMatchers(RequestUrl.SLASH).hasAnyRole("USER","ADMIN")
+			.anyRequest()
+			.authenticated();
+
+		http.formLogin()
+			.loginPage(RequestUrl.LOGIN)
+			.defaultSuccessUrl(RequestUrl.INDEX, true)
+			.failureHandler(customAuthenticationFailureHandler());
+
+		http.logout()
+			.logoutRequestMatcher(new AntPathRequestMatcher(RequestUrl.LOGOUT))
+			.logoutSuccessUrl(RequestUrl.LOGIN)
+			.invalidateHttpSession(true)
+			.deleteCookies("JSESSIONID")
+			.permitAll();
+
+		http.exceptionHandling().accessDeniedPage(RequestUrl.ERROR);
+
+		http.sessionManagement()
+			.maximumSessions(1)
+			.expiredUrl(RequestUrl.LOGIN)
+			.maxSessionsPreventsLogin(true);
 //		http.authorizeRequests()
 //				.antMatchers(
 //						RequestUrl.LOGIN + "/**"
