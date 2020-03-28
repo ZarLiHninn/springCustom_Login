@@ -45,22 +45,19 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 				.passwordParameter("password")
 				.failureHandler(customAuthenticationFailureHandler());
 
-		http.sessionManagement()
-				.maximumSessions(1)
-				.maxSessionsPreventsLogin(true)
-
-				.expiredUrl(RequestUrl.LOGIN);
-
 		http.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher(RequestUrl.LOGOUT))
 				.logoutSuccessUrl(RequestUrl.LOGIN)
+				.deleteCookies("JSESSIONID")
+				.invalidateHttpSession(true)
 				.permitAll();
-	}
 
-	@Bean
-	public SessionRegistry sessionRegistry() {
-		SessionRegistry sessionRegistry = new SessionRegistryImpl();
-		return sessionRegistry;
+		http.sessionManagement()
+				.maximumSessions(1)
+				.maxSessionsPreventsLogin(true)
+				.expiredUrl(RequestUrl.LOGOUT);
+
+		http.headers().disable();
 	}
 
 	@Override
