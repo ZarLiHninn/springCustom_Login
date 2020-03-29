@@ -3,17 +3,27 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Welcome</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} " />
+	<link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css} " />
+	<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
 <body>
 	<div class="container">
-		<h1>Hello World</h1>
+	   <h1 style="color:brown;text-align:center;">Thank You!</h1>
+	   <div class="row">
+	      <div class="col-md-6">
+	        <img src="images/welcome.jpeg" class="img-fluid">
+	      </div>
+	      <div class="col-md-6">
+	        <h1>Hello World</h1>
 		<span th:text="${username}"></span>
 		<form action="#" th:action="@{/logout}" method="post">
 			<input type="submit" value="Logout" />
 		</form>
+	      </div>
+	   </div>
+		
 	</div>
 </body>
 </html>
