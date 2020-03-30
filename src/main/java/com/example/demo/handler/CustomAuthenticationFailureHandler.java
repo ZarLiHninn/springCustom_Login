@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.handler;
 
 import com.example.demo.constant.RequestUrl;
 import org.springframework.security.core.AuthenticationException;

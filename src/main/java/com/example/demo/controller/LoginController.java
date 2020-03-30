@@ -33,7 +33,7 @@ public class LoginController {
 			@RequestAttribute(name = WebAttributes.AUTHENTICATION_EXCEPTION, required = false) AuthenticationException exception,
 			Model model){
 		if (Objects.nonNull(user)){
-			return "redirect:" + RequestUrl.INDEX;
+			return "redirect:" + RequestUrl.HOME;
 		}
 		if (Objects.nonNull(exception)) {
 			setErrorMessage(exception, model);

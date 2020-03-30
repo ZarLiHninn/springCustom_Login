@@ -3,7 +3,9 @@
 <head>
 	<title>Login Form</title>
 	<!--	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">-->
+	<link rel="stylesheet" th:href="@{/css/reset.css}">
 	<link rel="stylesheet" th:href="@{/css/style.css}">
+	<link rel="stylesheet" th:href="@{/css/login.css}">
 	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
 	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,10 +13,10 @@
 <body>
 <img class="wave" th:src="@{/img/wave.png}">
 <div class="container">
-	<div class="img">
+	<div class="side-img">
 		<img th:src="@{/img/bg.svg}">
 	</div>
-	<div class="login-content">
+	<section class="login-content">
 		<form action="#" th:action="@{/login}" method="post">
 			<img th:src="@{img/avatar.svg}">
 			<h2 class="title">Welcome</h2>
@@ -36,11 +38,10 @@
 					<input type="password" class="input" name="password">
 				</div>
 			</div>
-			<a href="#">Forgot Password?</a>
 			<input type="submit" class="btn" value="Login">
 			<div class="error" th:text="${error}"></div>
 		</form>
-	</div>
+	</section>
 </div>
 <script type="text/javascript" th:src="@{/js/main.js}"></script>
 </body>
