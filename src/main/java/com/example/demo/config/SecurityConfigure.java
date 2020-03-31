@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;import com.example.demo.constant.RequestUrl;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
@@ -23,7 +24,11 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers(RequestUrl.LOGIN + "/**").permitAll()
+		.antMatchers(RequestUrl.LOGIN + "/**"
+				,"/webjars/**"
+				,"/css/**"
+				, "/images/**"
+				).permitAll()
 		.antMatchers(RequestUrl.INDEX).hasAnyRole("ADMIN", "USER")
 		.antMatchers(RequestUrl.SLASH).hasAnyRole("ADMIN", "USER")
 		.anyRequest()
@@ -43,6 +48,8 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 		http.logout()
 		.logoutRequestMatcher(new AntPathRequestMatcher(RequestUrl.LOGOUT))
 		.logoutSuccessUrl(RequestUrl.LOGIN)
+	    .invalidateHttpSession(true)
+	    .deleteCookies("JSESSIONID")
 		.permitAll();
 
 	}
@@ -66,6 +73,11 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 	@Bean
 	public AuthenticationFailureHandler customAuthenticationFailureHandler() {
 		return new CustomAuthenticationFailureHandler();
+	}
+	
+	@Bean
+	public HttpSessionEventPublisher httpSessionEventPublisher() {
+	    return new HttpSessionEventPublisher();
 	}
 
 }
