@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,38 +8,51 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;import com.example.demo.constants.RequestUrl;
-
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;import com.example.demo.constant.RequestUrl;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 public class SecurityConfigure extends WebSecurityConfigurerAdapter{
-    //login and logout
+
+	@Autowired
+	UserDetailsService userDetailsService;
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers(RequestUrl.SLASH).permitAll()
-		.antMatchers(RequestUrl.SLASH).hasAnyRole("USER","ADMIN")
-		.anyRequest().authenticated()
-		.and()
-		.formLogin()
-		.loginPage(RequestUrl.LOGIN)
-		.permitAll()
-		.defaultSuccessUrl(RequestUrl.INDEX)
-		.and()
-		.logout()
-		.logoutSuccessUrl(RequestUrl.LOGIN)
-		.and()
-		.exceptionHandling().accessDeniedPage("/error")
-		.and()
-		.sessionManagement()
-		.maximumSessions(1)
-		.expiredUrl(RequestUrl.LOGIN)
-		.maxSessionsPreventsLogin(true)
-		.sessionRegistry(sessionRegistry());
-		
-	}
+		.antMatchers(RequestUrl.LOGIN + "/**"
+				,"/webjars/**"
+				,"/css/**"
+				, "/images/**"
+				).permitAll()
+		.antMatchers(RequestUrl.INDEX).hasAnyRole("ADMIN", "USER")
+		.antMatchers(RequestUrl.SLASH).hasAnyRole("ADMIN", "USER")
+		.anyRequest()
+		.authenticated();
 
+		http.formLogin()
+		.loginPage(RequestUrl.LOGIN)
+		.defaultSuccessUrl(RequestUrl.INDEX, true)
+		.failureHandler(customAuthenticationFailureHandler());
+
+		http.sessionManagement()
+		.maximumSessions(1)
+		.maxSessionsPreventsLogin(true)
+
+		.expiredUrl(RequestUrl.LOGIN);
+
+		http.logout()
+		.logoutRequestMatcher(new AntPathRequestMatcher(RequestUrl.LOGOUT))
+		.logoutSuccessUrl(RequestUrl.LOGIN)
+	    .invalidateHttpSession(true)
+	    .deleteCookies("JSESSIONID")
+		.permitAll();
+
+	}
 
 	@Bean
 	public SessionRegistry sessionRegistry() {
@@ -49,15 +62,22 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-		.withUser("user").password(passwordEncoder().encode("pass")).roles("USER")
-		.and()
-		.withUser("admin").password(passwordEncoder().encode("adpass")).roles("ADMIN");
-    }
+		auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
+	}
 
 	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+	public PasswordEncoder getPasswordEncoder(){
+		return NoOpPasswordEncoder.getInstance();
+	}
+
+	@Bean
+	public AuthenticationFailureHandler customAuthenticationFailureHandler() {
+		return new CustomAuthenticationFailureHandler();
+	}
+	
+	@Bean
+	public HttpSessionEventPublisher httpSessionEventPublisher() {
+	    return new HttpSessionEventPublisher();
 	}
 
 }
